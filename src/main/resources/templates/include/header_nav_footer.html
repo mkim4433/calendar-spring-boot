@@ -1,0 +1,27 @@
+<html lang="en"
+      xmlns="http://www.thymeleaf.org">
+
+<header th:fragment="header">
+    <div id="top">
+        <h3>My Calendar</h3>
+    </div>
+    <div id="header_wrap">
+        <a th:href="@{/}">Home</a> &nbsp;&nbsp;
+        <a th:href="@{/member/signup}">Sign-up</a> &nbsp;&nbsp;
+        <a th:href="@{/member/signin}">Sign-in</a> &nbsp;&nbsp;
+    </div>
+</header>
+
+<nav th:fragment="nav">
+    <div id="nav_wrap">
+        <a th:href="@{/planner}">Planner</a>
+    </div>
+</nav>
+
+<footer th:fragment="footer">
+    <div id="footer_wrap">
+        Copyright Office Inc. All Rights Reserved.
+    </div>
+</footer>
+
+</html>
