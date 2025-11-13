@@ -14,13 +14,14 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
-    // 가입.
+    // 회원 가입 양식
     @GetMapping("/signup")
     public String signup() {
 
         return "member/signup_form";
     }
 
+    // 회원 가입 확인
     @PostMapping("/signup_confirm")
     public String signupConfirm(MemberDto memberDto, Model model) {
 
@@ -31,4 +32,20 @@ public class MemberController {
         return "member/signup_result";
     }
 
+    // 로그인 양식
+    @GetMapping("/signin")
+    public String signin() {
+
+        return "member/signin_form";
+    }
+
+    // 로그인 확인
+    @PostMapping("/signin_confirm")
+    public String signinConfirm(MemberDto memberDto, Model model) {
+
+        String loginedId = memberService.signinConfirm(memberDto);
+        model.addAttribute("loginedId", loginedId);
+
+        return "member/signin_result";
+    }
 }

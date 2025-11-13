@@ -22,3 +22,20 @@ function signupForm() {
         form.submit();
     }
 }
+
+// 로그인 유효성 검사
+function signinForm() {
+
+    let form = document.signin_form;
+    if (form.id.value === '') {
+        alert("INPUT MEMBER ID!!")
+        form.id.focus();
+
+    } else if (form.pw.value === '') {
+        alert("INPUT MEMBER PW!!")
+        form.pw.focus();
+
+    } else {
+        form.submit();
+    }
+}

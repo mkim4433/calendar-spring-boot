@@ -40,4 +40,16 @@ public class MemberService {
             return USER_ID_ALREADY_EXIST;
         }
     }
+
+    public String signinConfirm(MemberDto memberDto) {
+
+        MemberDto selectedDto = memberDao.selectMemberById(memberDto.getId());
+
+        if (selectedDto != null && passwordEncoder.matches(memberDto.getPw(), selectedDto.getPw())) {
+            return selectedDto.getId();
+
+        } else {
+            return null;
+        }
+    }
 }
