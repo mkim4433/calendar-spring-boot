@@ -15,17 +15,15 @@ public class MemberService {
 
     public int signupConfirm(MemberDto memberDto) {
 
-        String id = memberDto.getId();
-
         // 기존 회원인지 확인
-        Boolean isMember = memberDao.isMember(id);
+        boolean isMember = memberDao.isMember(memberDto.getId());
 
         // 회원 여부에 따라 처리
         if (!isMember) {
 
-           int insertResult = memberDao.insertMember(memberDto);
+           int result = memberDao.insertMember(memberDto);
 
-           if(insertResult == 1) {
+           if(result > 0) {
                return USER_SIGNUP_SUCCESS;
            } else {
                return USER_SIGNUP_FAIL;
