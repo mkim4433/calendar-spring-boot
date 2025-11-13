@@ -22,8 +22,12 @@
             SIGN-UP RESULT
         </div>
         <div class="content">
-            사인업 리절트 화면
-            <span th:text="${result}"></span>
+            <th:block th:if="${result > 0}">
+                SIGN-UP SUCCESS!!!
+            </th:block>
+            <th:block th:if="${result <= 0}">
+                SIGN-UP FAIL...ㅠㅠ
+            </th:block>
         </div>
     </div>
 </section>

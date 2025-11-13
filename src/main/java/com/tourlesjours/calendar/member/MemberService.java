@@ -1,6 +1,7 @@
 package com.tourlesjours.calendar.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +13,8 @@ public class MemberService {
 
     @Autowired
     MemberDao memberDao;
+    @Autowired
+    PasswordEncoder passwordEncoder;    // 암호화
 
     public int signupConfirm(MemberDto memberDto) {
 
@@ -21,6 +24,10 @@ public class MemberService {
         // 회원 여부에 따라 처리
         if (!isMember) {
 
+            // 비밀번호 암호화
+            String encodedPw = passwordEncoder.encode(memberDto.getPw());
+            memberDto.setPw(encodedPw);
+
            int result = memberDao.insertMember(memberDto);
 
            if(result > 0) {
@@ -29,7 +36,6 @@ public class MemberService {
                return USER_SIGNUP_FAIL;
            }
 
-        // 기존 회원이면
         } else {
             return USER_ID_ALREADY_EXIST;
         }
