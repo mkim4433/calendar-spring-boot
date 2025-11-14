@@ -7,8 +7,17 @@
     </div>
     <div id="header_wrap">
         <a th:href="@{/}">Home</a> &nbsp;&nbsp;
-        <a th:href="@{/member/signup}">Sign-up</a> &nbsp;&nbsp;
-        <a th:href="@{/member/signin}">Sign-in</a> &nbsp;&nbsp;
+
+        <span th:if="${session.loginedId == null}">
+            <a th:href="@{/member/signup}">Sign-up</a> &nbsp;&nbsp;
+            <a th:href="@{/member/signin}">Sign-in</a> &nbsp;&nbsp;
+        </span>
+
+        <span th:if="${session.loginedId != null}">
+            <a th:href="@{/member/modify}">Modify</a> &nbsp;&nbsp;
+            <a th:href="@{/member/signout_confirm}">Sign-out</a> &nbsp;&nbsp;
+        </span>
+
     </div>
 </header>
 
