@@ -63,4 +63,26 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    // 회원정보 수정
+    @GetMapping("/modify")
+    public String modify(HttpSession session, Model model) {
+
+        String loginedId = String.valueOf(session.getAttribute("loginedId"));
+        MemberDto loginedMemberDto = memberService.modify(loginedId);
+
+        model.addAttribute("loginedMemberDto", loginedMemberDto);
+
+        return "/member/modify_form";
+    }
+
+    // 회원정보 수정 확인
+    @PostMapping("/modify_confirm")
+    public String modifyConfirm(MemberDto memberDto, Model model) {
+
+        int result = memberService.modifyConfirm(memberDto);
+        model.addAttribute("result", result);
+
+        return "/member/modify_result";
+    }
 }

@@ -39,3 +39,24 @@ function signinForm() {
         form.submit();
     }
 }
+
+// 회원정보 수정 유효성 검사
+function modifyForm() {
+
+    let form = document.modify_form;
+    if (form.pw.value === '') {
+        alert("INPUT MEMBER PW!!")
+        form.pw.focus();
+
+    } else if (form.mail.value === '') {
+        alert("INPUT MEMBER MAIL!!")
+        form.mail.focus();
+
+    } else if (form.phone.value === '') {
+        alert("INPUT MEMBER PHONE!!")
+        form.phone.focus();
+
+    } else {
+        form.submit();
+    }
+}

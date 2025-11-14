@@ -49,7 +49,28 @@ public class MemberService {
             return selectedDto.getId();
 
         } else {
-            return null;
+            return null;                
         }
+    }
+
+    public MemberDto modify(String loginedId) {
+
+        MemberDto dto = memberDao.selectMemberById(loginedId);
+
+        return dto;
+    }
+
+    public int modifyConfirm(MemberDto memberDto) {
+
+        int result = -1;
+
+        try {
+            result = memberDao.updateMember(memberDto);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
