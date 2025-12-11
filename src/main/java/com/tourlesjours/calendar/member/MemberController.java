@@ -73,7 +73,7 @@ public class MemberController {
 
         model.addAttribute("loginedMemberDto", loginedMemberDto);
 
-        return "/member/modify_form";
+        return "member/modify_form";
     }
 
     // 회원정보 수정 확인
@@ -83,6 +83,25 @@ public class MemberController {
         int result = memberService.modifyConfirm(memberDto);
         model.addAttribute("result", result);
 
-        return "/member/modify_result";
+        return "member/modify_result";
     }
+
+    // 비밀번호 찾기
+    @GetMapping("/findpassword")
+    public String findPassword() {
+
+        return "member/findpassword_form";
+    }
+
+    // 비밀번호 찾기 확인
+    @PostMapping("/findpassword_confirm")
+    public String findPasswordConfirm(MemberDto memberDto, Model model) {
+
+        int result = memberService.findPasswordConfirm(memberDto);
+        model.addAttribute("result", result);
+
+        return "member/findpassword_result";
+    }
+
+
 }

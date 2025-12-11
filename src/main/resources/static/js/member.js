@@ -60,3 +60,18 @@ function modifyForm() {
         form.submit();
     }
 }
+
+// 비밀번호 찾기 유효성 검사
+function findpasswordForm() {
+
+    let form = document.findpassword_form;
+    if (form.id.value === '') {
+        alert("INPUT MEMBER ID!!")
+        form.id.focus();
+    } else if (form.mail.value === '') {
+        alert("INPUT MEMBER MAIL!!")
+        form.mail.focus();
+    } else {
+        form.submit();
+    }
+}
