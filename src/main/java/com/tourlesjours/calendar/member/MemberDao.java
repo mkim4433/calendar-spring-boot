@@ -15,8 +15,11 @@ import java.util.Map;
 @Repository
 public class MemberDao {
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public MemberDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     Map<String, MemberDto> db = new HashMap<>();
 

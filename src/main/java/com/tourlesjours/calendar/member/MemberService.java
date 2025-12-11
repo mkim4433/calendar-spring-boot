@@ -17,14 +17,19 @@ public class MemberService {
     public final static int USER_SIGNUP_SUCCESS = 1;
     public final static int USER_SIGNUP_FAIL = -1;
 
-    @Autowired
-    MemberDao memberDao;
+    private final MemberDao memberDao;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;    // 암호화
+    private final PasswordEncoder passwordEncoder;    // 암호화
 
-    @Autowired
-    JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
+
+    public MemberService(MemberDao memberDao,
+                         PasswordEncoder passwordEncoder,
+                         JavaMailSender javaMailSender) {
+        this.memberDao = memberDao;
+        this.passwordEncoder = passwordEncoder;
+        this.javaMailSender = javaMailSender;
+    }
 
     @Value("${MAIL_SENDER_ADDRESS}")
     private String mailSenderAddress;
