@@ -13,6 +13,10 @@
         -->
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}] - %m%n</Property>
 
+        <!-- 로그 파일 경로 -->
+        <!-- 로그 파일이 저장될 기본 경로를 지정 -->
+        <Property name="LOG_PATH">logs</Property>
+
     </Properties>
 
     <!-- 로그를 출력할 대상 선택 -->
@@ -22,16 +26,81 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
+
+        <!--
+        파일(spring-root-info / spring-app-info)에 로그가 저장되도록 설정
+        로그 레벨 INFO 이상의 로그들(INFO, WARN, ERROR)이 모두 파일에 기록
+        -->
+        <!-- 로그 파일 기록 :: Root -->
+        <File name="FileForRootByInfo" fileName="${LOG_PATH}/spring-root-info.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <!-- 로그 파일 기록 :: Application -->
+        <!--<File name="FileForAppByInfo" fileName="${LOG_PATH}/spring-app-info.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>-->
+
+        <!-- 로그 파일 기록 :: Application 로그를 단계별로 별도 관리. -->
+        <File name="FileForAppByDebug" fileName="${LOG_PATH}/spring-app-debug.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <File name="FileForAppByInfo" fileName="${LOG_PATH}/spring-app-info.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <File name="FileForAppByWarn" fileName="${LOG_PATH}/spring-app-warn.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <LevelRangeFilter minLevel="WARN" maxLevel="WARN" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>
+
+        <File name="FileForAppByError" fileName="${LOG_PATH}/spring-app-error.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Filters>
+                <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+        </File>
     </Appenders>
 
     <!-- 로그를 남기는 로거(Logger) 설정-->
     <Loggers>
         <!-- 기본 로거 설정 -->
-        <!-- 기본 로그 레벨을 INFO 이상으로 설정해서 DEBUG 이하 로그는 출력되지 않도록 설정(INFO, WARN, ERROR 레벨 로그는 출력됨) -->
+        <!--
+        기본 로그 레벨을 INFO 이상으로 설정해서 DEBUG 이하 로그는 출력되지 않도록 설정.
+        (INFO, WARN, ERROR 레벨 로그는 출력됨)
+        -->
         <Root level="info">
             <AppenderRef ref="Console" />
+            <AppenderRef ref="FileForRootByInfo" />
         </Root>
-    </Loggers>
 
+        <!-- 애플리케이션 패키지 로깅 -->
+        <!--
+        'com.tourlesjours' 패키지에서 발생하는 로그를 별도로 관리.
+        additivity="false" 로 하면 패키지 로그가 Root 로그로 전달되지 않음.
+        -->
+        <Logger name="com.tourlesjours" level="debug" additivity="false">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="FileForAppByDebug" />
+            <AppenderRef ref="FileForAppByInfo" />
+            <AppenderRef ref="FileForAppByWarn" />
+            <AppenderRef ref="FileForAppByError" />
+        </Logger>
+    </Loggers>
 
 </Configuration>

@@ -10,7 +10,10 @@ public class HomeController {
 
     @GetMapping({"", "/"})
     public String home() {
-        log.info("home()");
+        log.debug(" DEBUG :: home()");
+        log.info(" INFO :: home()");
+        log.warn(" WARN :: home()");
+        log.error(" ERROR :: home()");
         return "home";
     }
 }
