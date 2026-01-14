@@ -1,6 +1,7 @@
 package com.tourlesjours.calendar.member;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequestMapping("/member")
 public class MemberController {
@@ -21,6 +23,7 @@ public class MemberController {
     // 회원 가입 양식
     @GetMapping("/signup")
     public String signup() {
+        log.info("signup()");
 
         return "member/signup_form";
     }
@@ -28,6 +31,7 @@ public class MemberController {
     // 회원 가입 확인
     @PostMapping("/signup_confirm")
     public String signupConfirm(MemberDto memberDto, Model model) {
+        log.info("signupConfirm()");
 
         int result = memberService.signupConfirm(memberDto);
 
@@ -39,6 +43,7 @@ public class MemberController {
     // 로그인 양식
     @GetMapping("/signin")
     public String signin() {
+        log.info("signin()");
 
         return "member/signin_form";
     }
@@ -46,6 +51,8 @@ public class MemberController {
     // 로그인 확인
     @PostMapping("/signin_confirm")
     public String signinConfirm(MemberDto memberDto, Model model, HttpSession session) {
+        log.info("signinConfirm()");
+
 
         String loginedId = memberService.signinConfirm(memberDto);
         model.addAttribute("loginedId", loginedId);
@@ -61,6 +68,7 @@ public class MemberController {
     // 로그아웃 확인
     @GetMapping("/signout_confirm")
     public String signoutConfirm(HttpSession session) {
+        log.info("signoutConfirm()");
 
         session.invalidate();
 
@@ -70,6 +78,7 @@ public class MemberController {
     // 회원정보 수정
     @GetMapping("/modify")
     public String modify(HttpSession session, Model model) {
+        log.info("modify()");
 
         String loginedId = String.valueOf(session.getAttribute("loginedId"));
         MemberDto loginedMemberDto = memberService.modify(loginedId);
@@ -82,6 +91,7 @@ public class MemberController {
     // 회원정보 수정 확인
     @PostMapping("/modify_confirm")
     public String modifyConfirm(MemberDto memberDto, Model model) {
+        log.info("modifyConfirm()");
 
         int result = memberService.modifyConfirm(memberDto);
         model.addAttribute("result", result);
@@ -92,6 +102,7 @@ public class MemberController {
     // 비밀번호 찾기
     @GetMapping("/findpassword")
     public String findPassword() {
+        log.info("findPassword()");
 
         return "member/findpassword_form";
     }
@@ -99,12 +110,12 @@ public class MemberController {
     // 비밀번호 찾기 확인
     @PostMapping("/findpassword_confirm")
     public String findPasswordConfirm(MemberDto memberDto, Model model) {
+        log.info("findPasswordConfirm()");
 
         int result = memberService.findPasswordConfirm(memberDto);
         model.addAttribute("result", result);
 
         return "member/findpassword_result";
     }
-
 
 }

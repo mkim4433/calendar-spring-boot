@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <!-- 로그 설정에 사용할 변수를 설정 -->
+    <Properties>
+        <!-- 로그 출력 패턴 설정 -->
+        <!--
+        %d{yyyy-MM-dd HH:mm:ss}: 로그 출력 시간(연-월-일 시:분:초)
+        %-5p: 로그 레벨 최대 5글자
+        %c{1}: 클래스 이름
+        %m: 로그 메세지
+        %n: 개행
+        -->
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %-5p [%c{1}] - %m%n</Property>
+
+    </Properties>
+
+    <!-- 로그를 출력할 대상 선택 -->
+    <Appenders>
+        <!-- 콘솔 출력 -->
+        <!-- 로그를 콘솔에 출력하도록 설정 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+    </Appenders>
+
+    <!-- 로그를 남기는 로거(Logger) 설정-->
+    <Loggers>
+        <!-- 기본 로거 설정 -->
+        <!-- 기본 로그 레벨을 INFO 이상으로 설정해서 DEBUG 이하 로그는 출력되지 않도록 설정(INFO, WARN, ERROR 레벨 로그는 출력됨) -->
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+
+
+</Configuration>
