@@ -1,5 +1,6 @@
 package com.tourlesjours.calendar.member;
 
+import com.tourlesjours.calendar.member.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,18 +18,18 @@ public class MemberService {
     public final static int USER_SIGNUP_SUCCESS = 1;
     public final static int USER_SIGNUP_FAIL = -1;
 
-    private final MemberDao memberDao;
-
+//    private final MemberDao memberDao;
     private final PasswordEncoder passwordEncoder;    // 암호화
-
     private final JavaMailSender javaMailSender;
+    private final MemberMapper memberMapper;
 
-    public MemberService(MemberDao memberDao,
-                         PasswordEncoder passwordEncoder,
-                         JavaMailSender javaMailSender) {
-        this.memberDao = memberDao;
+    public MemberService(PasswordEncoder passwordEncoder,
+                         JavaMailSender javaMailSender,
+                         MemberMapper memberMapper) {
+//        this.memberDao = memberDao;
         this.passwordEncoder = passwordEncoder;
         this.javaMailSender = javaMailSender;
+        this.memberMapper = memberMapper;
     }
 
     @Value("${MAIL_SENDER_ADDRESS}")
@@ -40,7 +41,7 @@ public class MemberService {
     public int signupConfirm(MemberDto memberDto) {
 
         // 기존 회원인지 확인
-        boolean isMember = memberDao.isMember(memberDto.getId());
+        boolean isMember = memberMapper.isMember(memberDto.getId());
 
         // 회원 여부에 따라 처리
         if (!isMember) {
@@ -49,7 +50,7 @@ public class MemberService {
             String encodedPw = passwordEncoder.encode(memberDto.getPw());
             memberDto.setPw(encodedPw);
 
-           int result = memberDao.insertMember(memberDto);
+           int result = memberMapper.insertMember(memberDto);
 
            if(result > 0) {
                return USER_SIGNUP_SUCCESS;
@@ -64,7 +65,7 @@ public class MemberService {
 
     public String signinConfirm(MemberDto memberDto) {
 
-        MemberDto selectedDto = memberDao.selectMemberById(memberDto.getId());
+        MemberDto selectedDto = memberMapper.selectMemberById(memberDto.getId());
 
         if (selectedDto != null && passwordEncoder.matches(memberDto.getPw(), selectedDto.getPw())) {
             return selectedDto.getId();
@@ -76,7 +77,7 @@ public class MemberService {
 
     public MemberDto modify(String loginedId) {
 
-        MemberDto dto = memberDao.selectMemberById(loginedId);
+        MemberDto dto = memberMapper.selectMemberById(loginedId);
 
         return dto;
     }
@@ -89,7 +90,7 @@ public class MemberService {
         memberDto.setPw(encodedPw);
 
         try {
-            result = memberDao.updateMember(memberDto);
+            result = memberMapper.updateMember(memberDto);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +101,7 @@ public class MemberService {
 
     public int findPasswordConfirm(MemberDto memberDto) {
 
-        MemberDto selectedMemberDto = memberDao.selectMemberByIdAndMail(memberDto);
+        MemberDto selectedMemberDto = memberMapper.selectMemberByIdAndMail(memberDto);
 
         int result = 0;
 
@@ -109,7 +110,7 @@ public class MemberService {
             String newPw = createNewPassword();
 
             // DB 업데이트
-            result = memberDao.updatePassword(memberDto.getId(), passwordEncoder.encode(newPw));
+            result = memberMapper.updatePassword(memberDto.getId(), passwordEncoder.encode(newPw));
 
             if (result > 0) {
                 // 새 비밀번호 메일 발송

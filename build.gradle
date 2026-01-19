@@ -51,6 +51,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
+	// Source: https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
