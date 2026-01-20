@@ -3,4 +3,17 @@
 
 <configuration>
 
+    <settings>
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="com.tourlesjours.calendar.member.MemberDto"
+                   alias="MemberDto" />
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="mybatis/mappers/member-mapper.xml" />
+    </mappers>
+
 </configuration>

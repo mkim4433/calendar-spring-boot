@@ -3,6 +3,8 @@
 
 <mapper namespace="com.tourlesjours.calendar.member.mapper.MemberMapper">
 
+    <cache />
+
     <select id="isMember"
             parameterType="String"
             resultType="Boolean">
@@ -13,7 +15,7 @@
     </select>
 
     <insert id="insertMember"
-            parameterType="com.tourlesjours.calendar.member.MemberDto">
+            parameterType="MemberDto">
 
         INSERT INTO USER_MEMBER(ID, PW, MAIL, PHONE)
         VALUES (#{id}, #{pw}, #{mail}, #{phone})
@@ -22,7 +24,7 @@
 
     <select id="selectMemberById"
             parameterType="String"
-            resultType="com.tourlesjours.calendar.member.MemberDto">
+            resultType="MemberDto">
 
         SELECT * FROM USER_MEMBER
                  WHERE ID = #{id}
@@ -30,7 +32,7 @@
     </select>
 
     <update id="updateMember"
-            parameterType="com.tourlesjours.calendar.member.MemberDto">
+            parameterType="MemberDto">
 
         UPDATE
             USER_MEMBER
@@ -45,8 +47,8 @@
     </update>
 
     <select id="selectMemberByIdAndMail"
-            parameterType="com.tourlesjours.calendar.member.MemberDto"
-            resultType="com.tourlesjours.calendar.member.MemberDto">
+            parameterType="MemberDto"
+            resultType="MemberDto">
 
         SELECT * FROM USER_MEMBER
                  WHERE ID = #{id} AND MAIL = #{mail}
