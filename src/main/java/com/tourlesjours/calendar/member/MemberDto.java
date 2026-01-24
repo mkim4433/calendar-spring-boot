@@ -1,15 +1,16 @@
 package com.tourlesjours.calendar.member;
 
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 //@Getter
 //@Setter
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class MemberDto implements Serializable {
 
@@ -20,7 +21,7 @@ public class MemberDto implements Serializable {
     private String pw;
     private String mail;
     private String phone;
-    private int autority_no;
+    private int authority_no;
     private String reg_date;
     private String mod_date;
 
