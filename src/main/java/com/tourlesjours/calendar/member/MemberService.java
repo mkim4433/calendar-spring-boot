@@ -79,14 +79,7 @@ public class MemberService {
 //                return USER_SIGNUP_FAIL;
 //            }
 
-            MemberEntity memberEntity = MemberEntity.builder()
-                    .memId(memberDto.getId())
-                    .memPw(memberDto.getPw())
-                    .memMail(memberDto.getMail())
-                    .memPhone(memberDto.getPhone())
-                    .build();
-
-            MemberEntity savedMemberEntity = memberRepository.save(memberEntity);
+            MemberEntity savedMemberEntity = memberRepository.save(memberDto.toEntity());
 
             if (savedMemberEntity != null)
                 return USER_SIGNUP_SUCCESS;
@@ -136,16 +129,7 @@ public class MemberService {
 
             MemberEntity foundMemberEntity = optionalMember.get();
 
-            MemberDto memberDto = MemberDto.builder()
-                    .no(foundMemberEntity.getMemNo())
-                    .id(foundMemberEntity.getMemId())
-                    .mail(foundMemberEntity.getMemMail())
-                    .phone(foundMemberEntity.getMemPhone())
-                    .authority_no(foundMemberEntity.getMemAuthorityNo())
-                    .reg_date(foundMemberEntity.getMemRegDate().toString())
-                    .mod_date(foundMemberEntity.getMemModDate().toString())
-                    .build();
-            return memberDto;
+            return foundMemberEntity.toDto();
         }
 
         return null;

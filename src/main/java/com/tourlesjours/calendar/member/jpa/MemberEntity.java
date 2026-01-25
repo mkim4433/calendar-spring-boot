@@ -1,5 +1,6 @@
 package com.tourlesjours.calendar.member.jpa;
 
+import com.tourlesjours.calendar.member.MemberDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "USER_MEMBER")
@@ -53,6 +55,21 @@ public class MemberEntity {
     @PreUpdate
     protected void onUpdate() {
         this.memModDate = LocalDateTime.now();
+    }
+
+    public MemberDto toDto() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return MemberDto.builder()
+                .no(memNo)
+                .id(memId)
+                .mail(memMail)
+                .phone(memPhone)
+                .authority_no(memAuthorityNo)
+                .reg_date(memRegDate != null ? memRegDate.format(formatter) : null)
+                .mod_date(memModDate != null ? memModDate.format(formatter) : null)
+                .build();
     }
 
 }
