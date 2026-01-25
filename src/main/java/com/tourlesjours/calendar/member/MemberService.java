@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -58,6 +59,7 @@ public class MemberService {
     private String mailReceiverAddress;
 
     // 회원가입
+    @Transactional
     public int signupConfirm(MemberDto memberDto) {
 
         // 기존 회원인지 확인
@@ -137,6 +139,7 @@ public class MemberService {
 
 
     // 회원 정보 수정 2 (실제 정보 수정)
+    @Transactional
     public int modifyConfirm(MemberDto memberDto) {
 
 //        int result = -1;
@@ -172,6 +175,7 @@ public class MemberService {
     }
 
     // 비밀번호 찾기
+    @Transactional
     public int findPasswordConfirm(MemberDto memberDto) {
 
 //        MemberDto selectedMemberDto = memberMapper.selectMemberByIdAndMail(memberDto);
