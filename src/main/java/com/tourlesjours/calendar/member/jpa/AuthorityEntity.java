@@ -1,0 +1,25 @@
+package com.tourlesjours.calendar.member.jpa;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "USER_AUTHORITY")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class AuthorityEntity {
+
+    @Id
+    @Column(name = "NO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Byte authNo;
+
+    @Column(name = "ROLE_NAME", nullable = false, length = 20)
+    private String authRoleName;
+}
