@@ -22,4 +22,11 @@ public class AuthorityEntity {
 
     @Column(name = "ROLE_NAME", nullable = false, length = 20)
     private String authRoleName;
+
+    public AuthorityDto toDto() {
+        return AuthorityDto.builder()
+                .no(authNo)
+                .role_name(authRoleName)
+                .build();
+    }
 }

@@ -8,6 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -48,41 +51,12 @@ public class MemberController {
         return "member/signin_form";
     }
 
-    // 로그인 확인
-    @PostMapping("/signin_confirm")
-    public String signinConfirm(MemberDto memberDto, Model model, HttpSession session) {
-        log.info("signinConfirm()");
-
-
-        String loginedId = memberService.signinConfirm(memberDto);
-        model.addAttribute("loginedId", loginedId);
-
-        if (loginedId != null) {
-            session.setAttribute("loginedId", loginedId);
-            session.setMaxInactiveInterval(60 * 30);
-        }
-
-        return "member/signin_result";
-    }
-
-    // 로그아웃 확인
-    @GetMapping("/signout_confirm")
-    public String signoutConfirm(HttpSession session) {
-        log.info("signoutConfirm()");
-
-        session.invalidate();
-
-        return "redirect:/";
-    }
-
     // 회원정보 수정
     @GetMapping("/modify")
-    public String modify(HttpSession session, Model model) {
+    public String modify(HttpSession session, Model model, Principal principal) {
         log.info("modify()");
 
-        String loginedId = String.valueOf(session.getAttribute("loginedId"));
-        MemberDto loginedMemberDto = memberService.modify(loginedId);
-
+        MemberDto loginedMemberDto = memberService.modify(principal.getName());
         model.addAttribute("loginedMemberDto", loginedMemberDto);
 
         return "member/modify_form";
@@ -116,6 +90,16 @@ public class MemberController {
         model.addAttribute("result", result);
 
         return "member/findpassword_result";
+    }
+
+    // 로그인 결과
+    @GetMapping("/signin_result")
+    public String signinResult(@RequestParam(value = "loginedId", required = false) String loginedId, Model model) {
+        log.info("signinResult()");
+
+        model.addAttribute("loginedId", loginedId);
+
+        return "member/signin_result";
     }
 
 }

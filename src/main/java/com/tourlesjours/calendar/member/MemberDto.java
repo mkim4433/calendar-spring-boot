@@ -1,6 +1,7 @@
 package com.tourlesjours.calendar.member;
 
 
+import com.tourlesjours.calendar.member.jpa.AuthorityDto;
 import com.tourlesjours.calendar.member.jpa.MemberEntity;
 import lombok.*;
 
@@ -8,8 +9,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-//@Getter
-//@Setter
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,7 +23,7 @@ public class MemberDto implements Serializable {
     private String pw;
     private String mail;
     private String phone;
-    private int authority_no;
+    private AuthorityDto authorityDto;
     private String reg_date;
     private String mod_date;
 
@@ -38,7 +37,7 @@ public class MemberDto implements Serializable {
                 .memPw(pw)
                 .memMail(mail)
                 .memPhone(phone)
-                .memAuthorityNo(authority_no)
+                .authorityEntity(authorityDto != null ? authorityDto.toEntity() : null)
                 .memRegDate(reg_date != null ? LocalDateTime.parse(reg_date, formatter) : null)
                 .memModDate(mod_date != null ? LocalDateTime.parse(mod_date, formatter) : null)
                 .build();
