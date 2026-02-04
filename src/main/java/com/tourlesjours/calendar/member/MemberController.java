@@ -102,4 +102,10 @@ public class MemberController {
         return "member/signin_result";
     }
 
+    // 권한 없는 경우
+    @GetMapping("/access_denied")
+    public String accessDenied() {
+        return "member/access_denied";
+    }
+
 }
