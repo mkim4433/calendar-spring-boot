@@ -10,11 +10,11 @@
     <div id="header_wrap">
         <a th:href="@{/}">Home</a> &nbsp;&nbsp;
 
-        <th:block sec:authorize="!hasAnyRole('PRE_USER')">
+        <th:block sec:authorize="!hasAnyRole('PRE_USER', 'USER')">
             <a th:href="@{/member/signup}">Sign-up</a> &nbsp;&nbsp;
             <a th:href="@{/member/signin}">Sign-in</a> &nbsp;&nbsp;
         </th:block>
-        <th:block sec:authorize="hasAnyRole('PRE_USER')">
+        <th:block sec:authorize="hasAnyRole('PRE_USER', 'USER')">
             <a th:href="@{/member/modify}">Modify</a> &nbsp;&nbsp;
             <a th:href="@{/member/signout_confirm}">Sign-out</a> &nbsp;&nbsp;
         </th:block>
