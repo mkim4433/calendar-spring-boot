@@ -1,5 +1,6 @@
-// 플래너 진입 시 오늘에 해당하는 달력 표출.
-// 사용자가 년, 월을 선택하면 해당하는 년, 월의 달력을 표출.
+// 플래너 진입 시 오늘에 해당하는 달력 표시.
+// 사용자가 년, 월을 선택하면 해당하는 년, 월의 달력을 표시.
+// 이전 월, 다음 월 버튼을 클릭하면 해당 월 달력 표시.
 
 let selected_year;
 let selected_month;
@@ -30,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addCalendarRow();
 
+    initEvents();
+
 });
 
 function setYearAndMonthSelectUI() {
@@ -41,7 +44,7 @@ function addCalendarRow() {
 
     // 선택 월의 첫날을 구한 다음, date, day 를 구함.
     let first = new Date(selected_year, selected_month, 1);
-    let firstDate = first.getDate();
+    // let firstDate = first.getDate();
     let firstDay = first.getDay();
 
     // 선택 월의 마지막날을 구한 다음, date 를 구함.
@@ -53,7 +56,7 @@ function addCalendarRow() {
     let dates = [];
     let dateCount = 1;
     for (let i = 0; i < 42; i++) {
-        if (i < firstDay || i >= lastDate) {
+        if (i < firstDay || dateCount > lastDate) {
             dates[i] = 0;
         } else {
             dates[i] = dateCount;
@@ -105,6 +108,99 @@ function addCalendarRow() {
         }
         tableBody.appendChild(row);
     }
+}
 
+function initEvents() {
+
+    // 이전 월 버튼 클릭 이벤트
+    document.querySelector("#section_wrap .btn_pre").addEventListener("click", function () {
+        // setPreMonth();
+        handleChangeMonth("prev");
+    })
+
+    // 다음 월 버튼 클릭 이벤트
+    document.querySelector("#section_wrap .btn_next").addEventListener("click", function () {
+        // setNextMonth();
+        handleChangeMonth("next");
+    })
+
+    // 년도 선택 이벤트
+    document.querySelector("#section_wrap select[name='p_year']").addEventListener("change", function () {
+        setMonthBySelectChanged();
+    })
+
+    // 월 선택 이벤트
+    document.querySelector("#section_wrap select[name='p_month']").addEventListener("change", function () {
+        setMonthBySelectChanged();
+    })
+}
+
+function handleChangeMonth(type) {
+
+    let yearSelect = document.querySelector("#section_wrap select[name='p_year']");
+    let monthSelect = document.querySelector("#section_wrap select[name='p_month']");
+
+    let temp_year = selected_year;
+    let temp_month = type === "prev" ? selected_month - 1 : selected_month + 1;
+
+
+    if (type === "prev") {
+
+        if (yearSelect.value === "2024" && monthSelect.value === "1") {
+            alert("2024년 1월 이전은 설정할 수 없습니다.");
+            return false;
+        }
+
+        if (temp_month < 0) {
+            temp_year -= 1;
+            temp_month = 11;
+        }
+    }
+
+    if (type === "next") {
+
+        if (yearSelect.value === "2030" && monthSelect.value === "12") {
+            alert("2030년 12월 이후는 설정할 수 없습니다.");
+            return false;
+        }
+
+        if (temp_month > 11) {
+            temp_year += 1;
+            temp_month = 0;
+        }
+    }
+
+    let tempCalendar = new Date(temp_year, temp_month, 1);
+    setSelectedCalendar(
+        tempCalendar.getFullYear(),
+        tempCalendar.getMonth(),
+        tempCalendar.getDate(),
+        tempCalendar.getDay()
+    );
+    setYearAndMonthSelectUI();
+    removeCalendarRow();
+    addCalendarRow();
+}
+
+function removeCalendarRow() {
+
+    let tbody = document.querySelector("#table_calendar tbody");
+    tbody.innerHTML = "";
+}
+
+function setMonthBySelectChanged() {
+
+    let temp_year = document.querySelector("select[name='p_year']").value;
+    let temp_month = document.querySelector("select[name='p_month']").value - 1; // 0~11
+
+    let tempCalendar = new Date(temp_year, temp_month, 1);
+    setSelectedCalendar(
+        tempCalendar.getFullYear(),
+        tempCalendar.getMonth(),
+        tempCalendar.getDate(),
+        tempCalendar.getDay()
+    );
+    removeCalendarRow();
+    addCalendarRow();
 }
 
