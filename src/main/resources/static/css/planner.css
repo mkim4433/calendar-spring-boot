@@ -63,7 +63,7 @@ section {
 	}
 
 #table_calendar tr th:last-child {
-	background-color: #8fd3b3;
+	background-color: #a4e1e1;
 	}
 
 #table_calendar tr td {
@@ -76,11 +76,11 @@ section {
 	}
 
 #table_calendar tr td:first-child {
-	background-color: #e7c7c7;
+	background-color: #faecec;
 	}
 
 #table_calendar tr td:last-child {
-	background-color: #8fd3b3;
+	background-color: #e4fcf7;
 	}
 
 #table_calendar tr td a.write {
