@@ -27,7 +27,6 @@ section {
 	text-align: center;
 	border: 1px solid #ccc;
 	border-radius: 60px;
-	text-align: center;
 
 	}
 
@@ -42,32 +41,32 @@ section {
 	}
 /* YEAR MONTH SELECT END */
 
-/* CALENDER START */
-#section_wrap .calender_wrap {
+/* calendar START */
+#section_wrap .calendar_wrap {
 	width: 1400px;
 	margin: 0 auto 30px;
 	}
 
-#table_calender {
+#table_calendar {
 	width: 100%;
 	border-collapse: collapse;
 	}
 
-#table_calender tr th {
+#table_calendar tr th {
 	border: 1px solid #ccc;
 	background-color: #f2f2f2;
 	padding: 5px 0;
 	}
 
-#table_calender tr th:first-child {
-	background-color: #fff5f5;
+#table_calendar tr th:first-child {
+	background-color: #e7c7c7;
 	}
 
-#table_calender tr th:last-child {
-	background-color: #e8fdff;
+#table_calendar tr th:last-child {
+	background-color: #a4e1e1;
 	}
 
-#table_calender tr td {
+#table_calendar tr td {
 	border: 1px solid #ccc;
 	text-align: right;
 	height: 150px;
@@ -76,15 +75,15 @@ section {
 	width: 210px;
 	}
 
-#table_calender tr td:first-child {
-	background-color: #fff5f5;
+#table_calendar tr td:first-child {
+	background-color: #faecec;
 	}
 
-#table_calender tr td:last-child {
-	background-color: #e8fdff;
+#table_calendar tr td:last-child {
+	background-color: #e1f5ee;
 	}
 
-#table_calender tr td a.write {
+#table_calendar tr td a.write {
 	display: inline-block;
 	border-radius: 3px;
 	padding: 0 6px 2px;
@@ -92,16 +91,16 @@ section {
 	color: #fff;
 	}
 
-#table_calender tr td ul.plan {
+#table_calendar tr td ul.plan {
 	overflow: hidden;
 	padding: 5px;
 }
 
-#table_calender tr td ul.plan li {
+#table_calendar tr td ul.plan li {
 	border-bottom: 1px dashed #ccc;
 	margin-top: 5px;
 	}
-/* CALENDER END */
+/* calendar END */
 
 /* WRITE PLAN START */
 #write_plan {

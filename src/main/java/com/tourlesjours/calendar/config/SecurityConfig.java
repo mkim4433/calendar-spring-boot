@@ -1,5 +1,6 @@
 package com.tourlesjours.calendar.config;
 
+import com.tourlesjours.calendar.member.security.MemberAccessDeniedHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ public class SecurityConfig {
                                 "/member/signin_result",
                                 "/member/findpassword",
                                 "/member/findpassword_confirm").permitAll()
+                        .requestMatchers("/planner/**").hasAnyRole("USER")
                         // 위 허용 외에 모든 요청에 대해 인증하도록 설정.
                         .anyRequest().authenticated()
                 );
@@ -80,6 +82,10 @@ public class SecurityConfig {
                             response.sendRedirect(targetURI);
                         })
                 );
+
+        http
+                .exceptionHandling(exception -> exception
+                        .accessDeniedHandler(new MemberAccessDeniedHandler()));
 
         return http.build();
     }
