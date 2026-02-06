@@ -127,9 +127,6 @@ function initEvents() {
         // 달력에서 일정 쓰기 버튼 클릭 시
         if (e.target.matches("#section_wrap a.write")) {
 
-            console.log("write click ::: ", e.target);
-            console.log("write click parent pre sib text ::: ", e.target.parentElement.previousSibling.textContent);
-
             let year = selected_year;
             let month = selected_month + 1;
             let date = e.target.parentElement.previousSibling.textContent;
@@ -142,6 +139,31 @@ function initEvents() {
         // 일정 등록 모달에서 등록 버튼 클릭 시
         if (e.target.matches("#write_plan input[value='WRITE']")) {
 
+            console.log(" WRITE btn clicked");
+            let year = document.querySelector("#write_plan select[name='wp_year']").value;
+            let month = document.querySelector("#write_plan select[name='wp_month']").value;
+            let date = document.querySelector("#write_plan select[name='wp_date']").value;
+
+            let title = document.querySelector("#write_plan input[name='p_title']").value;
+            let body = document.querySelector("#write_plan input[name='p_body']").value;
+            let file = document.querySelector("#write_plan input[name='p_file']").value;
+
+            // 입력값 유효성 체크
+            if (title === "") {
+                alert("Input plan title!");
+                document.querySelector("#write_plan input[name='p_title']").focus();
+            } else if (body === "") {
+                alert("Input plan body!");
+                document.querySelector("#write_plan input[name='p_body']").focus();
+            } else if (file === "") {
+                alert("Select plan file!");
+                document.querySelector("#write_plan input[name='p_file']").focus();
+            } else {
+                let inputFile = document.querySelector("#write_plan input[name='p_file']");
+                let files = inputFile.files;
+            }
+
+            fetchWritePlan(year, month, date, title, body, file[0]);
         }
 
         // todo 모달 초기화 기능 구현
@@ -276,12 +298,10 @@ function hideWritePlanView(year, month, date) {
 // 년, 월 변경 시 해당 월에 맞게 일 셀렉트 옵션을 재구성.
 function setDateSelectOptions(year, month, selectName) {
 
-    console.log("NEW date options by changed month or year !! ");
     let last = new Date(year, month, 0);
 
     let selectElement = document.querySelector(`select[name='${selectName}']`);
 
-    console.log("selectElement :::", selectElement);
     selectElement.innerHTML = "";
 
     for (let i = 1; i <= last.getDate(); i++) {
