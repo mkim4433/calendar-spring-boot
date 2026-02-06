@@ -112,26 +112,75 @@ function addCalendarRow() {
 
 function initEvents() {
 
-    // 이전 월 버튼 클릭 이벤트
-    document.querySelector("#section_wrap .btn_pre").addEventListener("click", function () {
-        // setPreMonth();
-        handleChangeMonth("prev");
+    // 'click' 이벤트 핸들러
+    document.addEventListener("click", function (e) {
+        // 달력에서 이전 월 버튼 클릭 시
+        if (e.target.matches("#section_wrap .btn_pre")) {
+            handleChangeMonth("prev");
+        }
+
+        // 달력에서 다음 월 버튼 클릭 시
+        if (e.target.matches("#section_wrap .btn_next")) {
+            handleChangeMonth("next");
+        }
+
+        // 달력에서 일정 쓰기 버튼 클릭 시
+        if (e.target.matches("#section_wrap a.write")) {
+
+            console.log("write click ::: ", e.target);
+            console.log("write click parent pre sib text ::: ", e.target.parentElement.previousSibling.textContent);
+
+            let year = selected_year;
+            let month = selected_month + 1;
+            let date = e.target.parentElement.previousSibling.textContent;
+            // let date = dateDiv ? dateDiv.textContent : "";
+
+            showWritePlanView(year, month, date);
+        }
+
+        // todo 일정 등록 기능 구현
+        // 일정 등록 모달에서 등록 버튼 클릭 시
+        if (e.target.matches("#write_plan input[value='WRITE']")) {
+
+        }
+
+        // todo 모달 초기화 기능 구현
+        // 일정 등록 모달에서 초기화 버튼 클릭 시
+
+
+        // 일정 등록 모달에서 취소 버튼 클릭 시
+        if (e.target.matches("#write_plan input[value='CANCEL']")) {
+            hideWritePlanView();
+        }
     })
 
-    // 다음 월 버튼 클릭 이벤트
-    document.querySelector("#section_wrap .btn_next").addEventListener("click", function () {
-        // setNextMonth();
-        handleChangeMonth("next");
-    })
+    // 'change' 이벤트 핸들러
+    document.addEventListener("change", function (e) {
+        // 달력에서 년도, 월 select 변경 이벤트
+        if (e.target.matches("#section_wrap select[name='p_year']") || e.target.matches("#section_wrap select[name='p_month']")) {
+            setMonthBySelectChanged();
+        }
 
-    // 년도 선택 이벤트
-    document.querySelector("#section_wrap select[name='p_year']").addEventListener("change", function () {
-        setMonthBySelectChanged();
-    })
+        // 일정 등록 모달에서 년도 변경 시
+        if (e.target.matches("#write_plan select[name='wp_year']")) {
 
-    // 월 선택 이벤트
-    document.querySelector("#section_wrap select[name='p_month']").addEventListener("change", function () {
-        setMonthBySelectChanged();
+            let year = e.target.value;
+            let month = document.querySelector("#write_plan select[name='wp_month']").value;
+
+            setDateSelectOptions(year, month, "wp_date");
+
+        }
+
+        // 일정 등록 모달에서 월 변경 시
+        if (e.target.matches("#write_plan select[name='wp_month']")) {
+
+            let year = document.querySelector("#write_plan select[name='wp_year']").value;
+            let month = e.target.value;
+
+            setDateSelectOptions(year, month, "wp_date");
+
+        }
+
     })
 }
 
@@ -204,3 +253,41 @@ function setMonthBySelectChanged() {
     addCalendarRow();
 }
 
+function showWritePlanView(year, month, date) {
+
+    document.querySelector("#write_plan select[name='wp_year']").value = year;
+    document.querySelector("#write_plan select[name='wp_month']").value = month;
+
+    setDateSelectOptions(year, month, "wp_date");
+    document.querySelector("#write_plan select[name='wp_date']").value = date;
+
+    document.querySelector("#write_plan").style.display = "block";
+}
+
+function hideWritePlanView(year, month, date) {
+
+    document.querySelector("#write_plan input[name='p_title']").value = "";
+    document.querySelector("#write_plan input[name='p_body']").value = "";
+    document.querySelector("#write_plan input[name='p_file']").value = "";
+
+    document.getElementById("write_plan").style.display = "none";
+}
+
+// 년, 월 변경 시 해당 월에 맞게 일 셀렉트 옵션을 재구성.
+function setDateSelectOptions(year, month, selectName) {
+
+    console.log("NEW date options by changed month or year !! ");
+    let last = new Date(year, month, 0);
+
+    let selectElement = document.querySelector(`select[name='${selectName}']`);
+
+    console.log("selectElement :::", selectElement);
+    selectElement.innerHTML = "";
+
+    for (let i = 1; i <= last.getDate(); i++) {
+        let option = document.createElement("option");
+        option.value = i;
+        option.textContent = i;
+        selectElement.appendChild(option);
+    }
+}

@@ -58,19 +58,63 @@
                 <table class="table_calendar" id="table_calendar">
                     <thead>
                     <tr>
-                        <th>일요일</th>
-                        <th>월요일</th>
-                        <th>화요일</th>
-                        <th>수요일</th>
-                        <th>목요일</th>
-                        <th>금요일</th>
-                        <th>토요일</th>
+                        <th>SUN</th>
+                        <th>MON</th>
+                        <th>TUE</th>
+                        <th>WED</th>
+                        <th>THU</th>
+                        <th>FRI</th>
+                        <th>SAT</th>
                     </tr>
                     </thead>
                     <tbody>
 
                     </tbody>
                 </table>
+            </div>
+
+            <div id="write_plan">
+                <div class="write_plan_wrap">
+                    <div class="year_month_date">
+                        <select name="wp_year">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                        </select>년 &nbsp;&nbsp;
+                        <select name="wp_month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>월 &nbsp;&nbsp;
+                        <select name="wp_date">
+
+                        </select>일
+                    </div>
+                    <div class="title_body">
+                        <form>
+                            <input type="text" name="p_title" placeholder="Input plan title"><br>
+                            <input type="text" name="p_body" placeholder="Input plan body"><br>
+                            <input type="file" name="p_file" placeholder="Select image file"><br><br>
+                            <input type="button" value="WRITE">
+                            <input type="button" value="RESET">
+                            <input type="button" value="CANCEL">
+                        </form>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
