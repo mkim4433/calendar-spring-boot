@@ -2,16 +2,16 @@
 // 사용자가 년, 월을 선택하면 해당하는 년, 월의 달력을 표시.
 // 이전 월, 다음 월 버튼을 클릭하면 해당 월 달력 표시.
 
-let selected_year;
-let selected_month;
-let selected_date;
-let selected_day;
+let current_year;
+let current_month;
+let current_date;
+let current_day;
 
-function setSelectedCalendar(year, month, date, day) {
-    selected_year = year;
-    selected_month = month;
-    selected_date = date;
-    selected_day = day;
+function setCurrentCalendar(year, month, date, day) {
+    current_year = year;
+    current_month = month;
+    current_date = date;
+    current_day = day;
 }
 
 // 플래너 진입 시 오늘에 해당하는 달력 표출.
@@ -25,30 +25,31 @@ document.addEventListener("DOMContentLoaded", function () {
     let today_date = today.getDate();
     let today_day = today.getDay();         // 오늘 요일 (0~6, 0:일요일)
 
-    setSelectedCalendar(today_year, today_month, today_date, today_day);
+    setCurrentCalendar(today_year, today_month, today_date, today_day);
 
     setYearAndMonthSelectUI();
 
     addCalendarRow();
+    fetchCurrentMonthPlans();
 
     initEvents();
 
 });
 
 function setYearAndMonthSelectUI() {
-    document.querySelector("#section_wrap select[name='p_year']").value = selected_year;
-    document.querySelector("#section_wrap select[name='p_month']").value = selected_month + 1;
+    document.querySelector("#section_wrap select[name='p_year']").value = current_year;
+    document.querySelector("#section_wrap select[name='p_month']").value = current_month + 1;
 }
 
 function addCalendarRow() {
 
     // 선택 월의 첫날을 구한 다음, date, day 를 구함.
-    let first = new Date(selected_year, selected_month, 1);
+    let first = new Date(current_year, current_month, 1);
     // let firstDate = first.getDate();
     let firstDay = first.getDay();
 
     // 선택 월의 마지막날을 구한 다음, date 를 구함.
-    let last = new Date(selected_year, selected_month + 1, 0);
+    let last = new Date(current_year, current_month + 1, 0);
     let lastDate = last.getDate();
 
     // 1주일 7일(1줄) * 최대 6줄 = 42
@@ -127,15 +128,14 @@ function initEvents() {
         // 달력에서 일정 쓰기 버튼 클릭 시
         if (e.target.matches("#section_wrap a.write")) {
 
-            let year = selected_year;
-            let month = selected_month + 1;
+            let year = current_year;
+            let month = current_month + 1;
             let date = e.target.parentElement.previousSibling.textContent;
             // let date = dateDiv ? dateDiv.textContent : "";
 
             showWritePlanView(year, month, date);
         }
 
-        // todo 일정 등록 기능 구현
         // 일정 등록 모달에서 등록 버튼 클릭 시
         if (e.target.matches("#write_plan input[value='WRITE']")) {
 
@@ -163,10 +163,13 @@ function initEvents() {
                 let files = inputFile.files;
 
                 fetchWritePlan(year, month, date, title, body, files[0]);
+
+                // 등록한 일정이 달력에서 보여야 됨.
+                // 등록한 일자로 상세 조회?
             }
         }
 
-        // todo 모달 초기화 기능 구현
+        // @todo 모달 초기화 기능 구현
         // 일정 등록 모달에서 초기화 버튼 클릭 시
 
 
@@ -211,8 +214,8 @@ function handleChangeMonth(type) {
     let yearSelect = document.querySelector("#section_wrap select[name='p_year']");
     let monthSelect = document.querySelector("#section_wrap select[name='p_month']");
 
-    let temp_year = selected_year;
-    let temp_month = type === "prev" ? selected_month - 1 : selected_month + 1;
+    let temp_year = current_year;
+    let temp_month = type === "prev" ? current_month - 1 : current_month + 1;
 
 
     if (type === "prev") {
@@ -242,7 +245,7 @@ function handleChangeMonth(type) {
     }
 
     let tempCalendar = new Date(temp_year, temp_month, 1);
-    setSelectedCalendar(
+    setCurrentCalendar(
         tempCalendar.getFullYear(),
         tempCalendar.getMonth(),
         tempCalendar.getDate(),
@@ -251,6 +254,7 @@ function handleChangeMonth(type) {
     setYearAndMonthSelectUI();
     removeCalendarRow();
     addCalendarRow();
+    fetchCurrentMonthPlans();
 }
 
 function removeCalendarRow() {
@@ -265,7 +269,7 @@ function setMonthBySelectChanged() {
     let temp_month = document.querySelector("select[name='p_month']").value - 1; // 0~11
 
     let tempCalendar = new Date(temp_year, temp_month, 1);
-    setSelectedCalendar(
+    setCurrentCalendar(
         tempCalendar.getFullYear(),
         tempCalendar.getMonth(),
         tempCalendar.getDate(),
@@ -273,6 +277,7 @@ function setMonthBySelectChanged() {
     );
     removeCalendarRow();
     addCalendarRow();
+    fetchCurrentMonthPlans();
 }
 
 function showWritePlanView(year, month, date) {

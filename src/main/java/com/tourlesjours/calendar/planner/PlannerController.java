@@ -61,4 +61,17 @@ public class PlannerController {
             return ResponseEntity.badRequest().body(errorMap);
         }
     }
+
+    // 해당 월 일정 목록 조회
+    @GetMapping("/plans")
+    public ResponseEntity<Map<String, Object>> getPlans(Principal principal,
+                                                        @RequestParam Map<String, Object> params) {
+
+        String loggedInId = principal.getName();
+        params.put("owner_id", loggedInId);
+
+        Map<String, Object> resultMap = plannerService.getPlans(params);
+
+        return ResponseEntity.ok(resultMap);
+    }
 }

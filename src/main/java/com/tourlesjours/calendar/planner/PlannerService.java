@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,7 +34,7 @@ public class PlannerService {
         int result = 0;
         plannerDto.setOri_owner_id(plannerDto.getOwner_id());
         PlannerEntity savedPlannerEntity = plannerRepository.save(plannerDto.toEntity());
-        if(savedPlannerEntity != null) {
+        if (savedPlannerEntity != null) {
             savedPlannerEntity.setPlanOriNo(savedPlannerEntity.getPlanNo());
             plannerRepository.save(savedPlannerEntity);
 
@@ -42,6 +44,26 @@ public class PlannerService {
         }
 
         resultMap.put("result", result);
+        return resultMap;
+    }
+
+    public Map<String, Object> getPlans(Map<String, Object> params) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        log.info("params : {}", params);
+        List<PlannerEntity> entities = plannerRepository.findByPlanYearAndPlanMonthAndPlanOwnerId(
+                Integer.parseInt(String.valueOf(params.get("year"))),
+                Integer.parseInt(String.valueOf(params.get("month"))),
+                String.valueOf(params.get("owner_id"))
+        );
+
+        List<PlannerDto> plans = entities.stream()
+                .map(PlannerEntity::toDto)
+                .collect(Collectors.toList());
+
+        resultMap.put("plans", plans);
+
         return resultMap;
     }
 }
