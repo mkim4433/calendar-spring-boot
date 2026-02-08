@@ -156,14 +156,14 @@ function initEvents() {
                 alert("Input plan body!");
                 document.querySelector("#write_plan input[name='p_body']").focus();
             } else if (file === "") {
-                alert("Select plan file!");
+                alert("Select image file!");
                 document.querySelector("#write_plan input[name='p_file']").focus();
             } else {
                 let inputFile = document.querySelector("#write_plan input[name='p_file']");
                 let files = inputFile.files;
-            }
 
-            fetchWritePlan(year, month, date, title, body, file[0]);
+                fetchWritePlan(year, month, date, title, body, files[0]);
+            }
         }
 
         // todo 모달 초기화 기능 구현

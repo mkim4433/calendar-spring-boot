@@ -9,8 +9,6 @@ async function fetchWritePlan(year, month, date, title, body, file) {
     reqFormData.append("body", body);
     reqFormData.append("file", file);
 
-    console.log("reqFormData :::", reqFormData);
-
     try {
         let response = await fetch("/planner/plan", {
             method: "POST",
@@ -19,7 +17,7 @@ async function fetchWritePlan(year, month, date, title, body, file) {
 
         let data = await response.json();
         if (!data || data.result < 1) {
-            console.log("fetchWritePlan something wrong.. ", data);
+            console.log("fetchWritePlan FAILED.. ", data);
             alert("일정 등록에 문제가 발생했습니다.");
         } else {
             console.log("fetchWritePlan SUCCESS!! ", data);
@@ -33,7 +31,7 @@ async function fetchWritePlan(year, month, date, title, body, file) {
         alert("일정 등록에 문제가 발생했습니다.");
 
     } finally {
-        console.log("fetchWritePlan finally completed!!")
+        console.log("fetchWritePlan finally completed. CLOSE MODAL.")
         hideWritePlanView();
     }
 }
