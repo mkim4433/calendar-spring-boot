@@ -77,7 +77,32 @@ async function fetchCurrentMonthPlans() {
     } catch (error) {
         console.log("fetchCurrentMonthPlans COMM ERROR!!", error);
     }
+}
 
+// 일정 상세 조회
+async function fetchPlanDetail(no) {
 
+    let queryString = new URLSearchParams({"no": no}).toString();
 
+    try {
+
+        let response = await fetch(`planner/plan?${queryString}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json", "charset": "utf-8"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Something went wrong");
+        }
+
+        let data = await response.json();
+        console.log("fetchPlanDetail COMM SUCCESS!!", data);
+
+        showPlanDetailView(data.plan);
+
+    } catch (error) {
+        console.log("fetchPlanDetail COMM ERROR!!", error);
+    }
 }

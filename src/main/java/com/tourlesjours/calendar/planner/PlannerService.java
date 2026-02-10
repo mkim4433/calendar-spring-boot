@@ -47,6 +47,7 @@ public class PlannerService {
         return resultMap;
     }
 
+    // 일정 목록 조회
     public Map<String, Object> getPlans(Map<String, Object> params) {
 
         Map<String, Object> resultMap = new HashMap<>();
@@ -63,6 +64,19 @@ public class PlannerService {
                 .collect(Collectors.toList());
 
         resultMap.put("plans", plans);
+
+        return resultMap;
+    }
+
+    // 일정 상세 조회
+    public Map<String, Object> getPlanDetail(Map<String, String> params) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        PlannerEntity entity = plannerRepository.findByPlanNo(Integer.parseInt(params.get("no")));
+        PlannerDto planDto = entity.toDto();
+
+        resultMap.put("plan", planDto);
 
         return resultMap;
     }

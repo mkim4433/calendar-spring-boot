@@ -163,19 +163,28 @@ function initEvents() {
                 let files = inputFile.files;
 
                 fetchWritePlan(year, month, date, title, body, files[0]);
-
-                // 등록한 일정이 달력에서 보여야 됨.
-                // 등록한 일자로 상세 조회?
             }
         }
 
-        // @todo 모달 초기화 기능 구현
-        // 일정 등록 모달에서 초기화 버튼 클릭 시
+        // 달력에서 일정 타이틀 클릭 시
+        if (e.target.matches("#table_calendar a.title")) {
+            const no = e.target.getAttribute("data-no");
+            fetchPlanDetail(no);
+        }
 
+        // 일정 등록 모달에서 초기화 버튼 클릭 시
+        if (e.target.matches("#write_plan input[value='RESET']")) {
+            resetPlanInput();
+        }
 
         // 일정 등록 모달에서 취소 버튼 클릭 시
         if (e.target.matches("#write_plan input[value='CANCEL']")) {
             hideWritePlanView();
+        }
+
+        // 일정 상세 모달에서 닫기 버튼 클릭 시
+        if (e.target.matches("#show_plan input[value='CLOSE']")) {
+            hidePlanDetailView();
         }
     })
 
@@ -291,13 +300,20 @@ function showWritePlanView(year, month, date) {
     document.querySelector("#write_plan").style.display = "block";
 }
 
-function hideWritePlanView(year, month, date) {
-
-    document.querySelector("#write_plan input[name='p_title']").value = "";
-    document.querySelector("#write_plan input[name='p_body']").value = "";
-    document.querySelector("#write_plan input[name='p_file']").value = "";
-
+function hideWritePlanView() {
+    resetPlanInput();
     document.getElementById("write_plan").style.display = "none";
+}
+
+function hidePlanDetailView() {
+    resetPlanInput();
+    document.getElementById("show_plan").style.display = "none";
+}
+
+function resetPlanInput() {
+    document.querySelector("input[name='p_title']").value = "";
+    document.querySelector("input[name='p_body']").value = "";
+    document.querySelector("input[name='p_file']").value = "";
 }
 
 // 년, 월 변경 시 해당 월에 맞게 일 셀렉트 옵션을 재구성.
@@ -315,4 +331,34 @@ function setDateSelectOptions(year, month, selectName) {
         option.textContent = i;
         selectElement.appendChild(option);
     }
+}
+
+// 일정 상세 모달 열기
+function showPlanDetailView(plan) {
+    console.log("showPlanDetailView -- ");
+    const detailView = document.querySelector("#show_plan");
+
+    // 값 설정
+    detailView.querySelector("select[name='dp_year']").value = plan.year;
+    detailView.querySelector("select[name='dp_month']").value = plan.month;
+    setDateSelectOptions(plan.year, plan.month, "dp_date");
+    detailView.querySelector("select[name='dp_date']").value = plan.date;
+
+    detailView.querySelector("input[name='p_title']").value = plan.title;
+    detailView.querySelector("input[name='p_body']").value = plan.body;
+
+    // img 설정
+    let imgElement = detailView.querySelector("img.plan_img");
+    imgElement.src = `/planUploadImg/${plan.ori_owner_id}/${plan.img_name}`;
+    // let imgPath = `/planUploadImg/${plan.ori_owner_id}/${plan.img_name}`;
+    // detailView.querySelector("img.plan_img").src = imgPath;
+
+    // data-* 속성 설정
+    detailView.querySelectorAll("input").forEach(input => {
+        input.setAttribute("data-no", plan.no);
+    });
+    detailView.dataset.ori_no = plan.ori_no;
+
+    // 모달 오픈
+    detailView.style.display = "block";
 }
