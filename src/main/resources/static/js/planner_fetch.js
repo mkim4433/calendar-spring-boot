@@ -21,10 +21,8 @@ async function fetchWritePlan(year, month, date, title, body, file) {
 
         let data = await response.json();
         if (!data || data.result < 1) {
-            console.log("fetchWritePlan FAILED.. ", data);
             alert("일정 등록에 문제가 발생했습니다.");
         } else {
-            console.log("fetchWritePlan SUCCESS!! ", data);
             alert("일정이 정상적으로 등록되었습니다.");
             removeCalendarRow();
             addCalendarRow();
@@ -36,7 +34,6 @@ async function fetchWritePlan(year, month, date, title, body, file) {
         alert("일정 등록에 문제가 발생했습니다.");
 
     } finally {
-        console.log("fetchWritePlan finally completed. CLOSE MODAL.")
         hideWritePlanView();
     }
 }
@@ -98,11 +95,85 @@ async function fetchPlanDetail(no) {
         }
 
         let data = await response.json();
-        console.log("fetchPlanDetail COMM SUCCESS!!", data);
 
         showPlanDetailView(data.plan);
 
     } catch (error) {
         console.log("fetchPlanDetail COMM ERROR!!", error);
+    }
+}
+
+// 일정 상세 수정
+async function fetchModifyPlan(no, year, month, date, title, body, file) {
+
+    const reqData = new FormData();
+    reqData.append("no", no);
+    reqData.append("year", year);
+    reqData.append("month", month);
+    reqData.append("date", date);
+    reqData.append("title", title);
+    reqData.append("body", body);
+
+    if (file !== undefined) {
+        reqData.append("file", file);
+    }
+
+    try {
+        const response = await fetch(`/planner/plan/${no}`, {
+            method: "PUT",
+            body: reqData,
+        });
+
+        if (!response.ok) {
+            throw new Error("Something went wrong");
+        }
+
+        const data = await response.json();
+        if (!data || data.result < 1) {
+            alert("일정 수정에 문제가 발생했습니다.");
+        } else {
+            alert("일정이 정상적으로 수정되었습니다.");
+            removeCalendarRow();
+            addCalendarRow();
+            fetchCurrentMonthPlans();
+        }
+
+    } catch (error) {
+        console.log("fetchModifyPlan COMM ERROR!!", error);
+    } finally {
+        hidePlanDetailView();
+    }
+}
+
+// 일정 삭제
+async function fetchDeletePlan(no) {
+
+    try {
+        const response = await fetch(`/planner/plan/${no}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json", "charset": "utf-8"
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok.");
+        }
+
+        let data = await response.json();
+        if (!data || data.result < 1) {
+            alert("일정 삭제에 문제가 발생했습니다. 다시 시도해 주세요.");
+        } else {
+            alert("일정이 정상적으로 삭제되었습니다.");
+            removeCalendarRow();
+            addCalendarRow();
+            fetchCurrentMonthPlans();
+        }
+
+    } catch (error) {
+        console.log("fetchDeletePlan COMM ERROR!!", error);
+        alert("일정 삭제 중 오류가 발생했습니다.");
+    } finally {
+        hidePlanDetailView();
     }
 }

@@ -139,14 +139,13 @@ function initEvents() {
         // 일정 등록 모달에서 등록 버튼 클릭 시
         if (e.target.matches("#write_plan input[value='WRITE']")) {
 
-            console.log(" WRITE btn clicked");
-            let year = document.querySelector("#write_plan select[name='wp_year']").value;
-            let month = document.querySelector("#write_plan select[name='wp_month']").value;
-            let date = document.querySelector("#write_plan select[name='wp_date']").value;
+            const year = document.querySelector("#write_plan select[name='wp_year']").value;
+            const month = document.querySelector("#write_plan select[name='wp_month']").value;
+            const date = document.querySelector("#write_plan select[name='wp_date']").value;
 
-            let title = document.querySelector("#write_plan input[name='p_title']").value;
-            let body = document.querySelector("#write_plan input[name='p_body']").value;
-            let file = document.querySelector("#write_plan input[name='p_file']").value;
+            const title = document.querySelector("#write_plan input[name='p_title']").value;
+            const body = document.querySelector("#write_plan input[name='p_body']").value;
+            const file = document.querySelector("#write_plan input[name='p_file']").value;
 
             // 입력값 유효성 체크
             if (title === "") {
@@ -185,6 +184,29 @@ function initEvents() {
         // 일정 상세 모달에서 닫기 버튼 클릭 시
         if (e.target.matches("#show_plan input[value='CLOSE']")) {
             hidePlanDetailView();
+        }
+
+        // 일정 상세 모달에서 수정 버튼 클릭 시
+        if (e.target.matches("#show_plan input[value='MODIFY']")) {
+
+            const year = document.querySelector("#show_plan select[name='dp_year']").value;
+            const month = document.querySelector("#show_plan select[name='dp_month']").value;
+            const date = document.querySelector("#show_plan select[name='dp_date']").value;
+            const title = document.querySelector("#show_plan input[name='p_title']").value;
+            const body = document.querySelector("#show_plan input[name='p_body']").value;
+
+            const fileInput = document.querySelector("#show_plan input[name='p_file']");
+            const file = fileInput.files.length ? fileInput.files[0] : null;
+
+            const no = e.target.getAttribute("data-no");
+
+            fetchModifyPlan(no, year, month, date, title, body, file);
+        }
+
+        // 일정 상세 모달에서 삭제 버튼 클릭 시
+        if (e.target.matches("#show_plan input[value='DELETE']")) {
+            const no = e.target.getAttribute("data-no");
+            fetchDeletePlan(no);
         }
     })
 
@@ -335,7 +357,6 @@ function setDateSelectOptions(year, month, selectName) {
 
 // 일정 상세 모달 열기
 function showPlanDetailView(plan) {
-    console.log("showPlanDetailView -- ");
     const detailView = document.querySelector("#show_plan");
 
     // 값 설정

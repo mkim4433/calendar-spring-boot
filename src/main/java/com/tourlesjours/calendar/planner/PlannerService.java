@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 @Service
 public class PlannerService {
 
+    private static final int PLAN_MODIFY_FAIL = 0;
+    private static final int PLAN_MODIFY_SUCCESS = 1;
+
     private final PlannerRepository plannerRepository;
     private final MemberRepository memberRepository;
 
@@ -52,7 +55,6 @@ public class PlannerService {
 
         Map<String, Object> resultMap = new HashMap<>();
 
-        log.info("params : {}", params);
         List<PlannerEntity> entities = plannerRepository.findByPlanYearAndPlanMonthAndPlanOwnerId(
                 Integer.parseInt(String.valueOf(params.get("year"))),
                 Integer.parseInt(String.valueOf(params.get("month"))),
@@ -77,6 +79,47 @@ public class PlannerService {
         PlannerDto planDto = entity.toDto();
 
         resultMap.put("plan", planDto);
+
+        return resultMap;
+    }
+
+    // 일정 상세 수정
+    @Transactional
+    public Map<String, Object> modifyPlan(PlannerDto plannerDto) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+        int result = PLAN_MODIFY_FAIL;
+
+        PlannerEntity entity = plannerRepository.findByPlanNo(plannerDto.getNo());
+
+        if (entity != null) {
+            entity.setPlanYear(plannerDto.getYear());
+            entity.setPlanMonth(plannerDto.getMonth());
+            entity.setPlanDate(plannerDto.getDate());
+            entity.setPlanTitle(plannerDto.getTitle());
+            entity.setPlanBody(plannerDto.getBody());
+
+            // 파일 있으면 파일 업데이트
+            if (plannerDto.getImg_name() != null) {
+                entity.setPlanImgName(plannerDto.getImg_name());
+            }
+
+            result = PLAN_MODIFY_SUCCESS;
+        }
+
+        resultMap.put("result", result);
+        return resultMap;
+    }
+
+    // 일정 삭제
+    @Transactional
+    public Map<String, Object> deletePlan(int no) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        int result = plannerRepository.deleteByPlanNo(no);
+
+        resultMap.put("result", result);
 
         return resultMap;
     }
