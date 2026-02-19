@@ -110,4 +110,17 @@ public class PlannerService {
         resultMap.put("result", result);
         return resultMap;
     }
+
+    // 일정 삭제
+    @Transactional
+    public Map<String, Object> deletePlan(int no) {
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        int result = plannerRepository.deleteByPlanNo(no);
+
+        resultMap.put("result", result);
+
+        return resultMap;
+    }
 }

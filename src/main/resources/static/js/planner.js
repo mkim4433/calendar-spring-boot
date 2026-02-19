@@ -202,6 +202,12 @@ function initEvents() {
 
             fetchModifyPlan(no, year, month, date, title, body, file);
         }
+
+        // 일정 상세 모달에서 삭제 버튼 클릭 시
+        if (e.target.matches("#show_plan input[value='DELETE']")) {
+            const no = e.target.getAttribute("data-no");
+            fetchDeletePlan(no);
+        }
     })
 
     // 'change' 이벤트 핸들러

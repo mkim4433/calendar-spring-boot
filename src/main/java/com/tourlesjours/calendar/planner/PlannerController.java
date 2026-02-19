@@ -107,4 +107,13 @@ public class PlannerController {
             return ResponseEntity.ok(plannerService.modifyPlan(plannerDto));
         }
     }
+
+    // 일정 삭제
+    @DeleteMapping("/plan/{no}")
+    public ResponseEntity<Map<String, Object>> deletePlan(@PathVariable("no") int no) {
+
+        Map<String, Object> result = plannerService.deletePlan(no);
+
+        return ResponseEntity.ok(result);
+    }
 }
