@@ -4,10 +4,7 @@ import com.tourlesjours.calendar.planner.util.UploadFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -82,5 +79,32 @@ public class PlannerController {
         Map<String, Object> resultMap = plannerService.getPlanDetail(params);
 
         return ResponseEntity.ok(resultMap);
+    }
+
+    // 일정 상세 수정
+    @PutMapping("/plan/{no}")
+    public ResponseEntity<Map<String, Object>> modifyPlan(@PathVariable("no") int no,
+                                                          PlannerDto plannerDto,
+                                                          @RequestParam(value = "file", required = false) MultipartFile file,
+                                                          Principal principal) {
+        plannerDto.setNo(no);
+        String loggedInId = principal.getName();
+
+        // 이미지 수정 있을 시
+        if (file != null) {
+            String savedFileName = uploadFileService.upload(loggedInId, file);
+            if (savedFileName != null) {
+                plannerDto.setImg_name(savedFileName);
+                plannerDto.setOwner_id(loggedInId);
+                return ResponseEntity.ok(plannerService.modifyPlan(plannerDto));
+            } else {
+                Map<String, Object> errorMap = new HashMap<>();
+                errorMap.put("message", "File upload failed.");
+                return ResponseEntity.badRequest().body(errorMap);
+            }
+            // 이미지 수정 없을 시
+        } else {
+            return ResponseEntity.ok(plannerService.modifyPlan(plannerDto));
+        }
     }
 }
